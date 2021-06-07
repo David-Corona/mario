@@ -3,6 +3,7 @@ package com.dcorona.mario.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +21,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dcorona.mario.Mario;
 import com.dcorona.mario.Scenes.Hub;
+import com.dcorona.mario.sprites.Player;
+import com.dcorona.mario.sprites.enemies.Enemy;
+import com.dcorona.mario.sprites.items.Item;
+import com.dcorona.mario.sprites.items.ItemDefinition;
+import com.dcorona.mario.sprites.items.Mushroom;
+import tools.B2WorldCreator;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -36,8 +43,7 @@ public class FirstLevel implements Screen {
 
     private World world; //cada nivel nuevo, tendrá un mapa nuevo, por eso está aqui
     private Box2DDebugRenderer b2dr; //para que se dibuje el circulito verde, cuando acabe se debería eliminar
-    private B2WorldCreator creator;
-    // se encargará de crear el mapa
+    private B2WorldCreator creator; // se encargará de crear el mapa
 
     private Player mario;
 
@@ -143,7 +149,7 @@ public class FirstLevel implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        this.viewport.update(width, height);
     }
 
     @Override
@@ -163,7 +169,11 @@ public class FirstLevel implements Screen {
 
     @Override
     public void dispose() {
-
+        map.dispose();
+        renderer.dispose();
+        world.dispose();
+        b2dr.dispose();
+        hub.dispose();
     }
 
     public void handleInput(float delta) {
@@ -177,6 +187,24 @@ public class FirstLevel implements Screen {
         if ((Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT)
                 && this.mario.getVelocity().x >= -2 )) {
             this.mario.impulseLeft();
+        }
+    }
+
+    public AssetManager getManager {
+        return this.game.getManager();
+    }
+
+    public void spawnItem (ItemDefinition itemDef) {
+        this.itemsToSpawn.add(itemDef);
+    }
+
+    public void handleSpawningItems() {
+        if(!this.itemsToSpawn.isEmpty()){
+            ItemDefinition itemDef = this.itemsToSpawn.poll();
+            if(itemDef.getType() == Mushroom.class){
+                this.items.add(
+                        new Mushroom(this, itemDef.getPosition().x, itemDef.getPosition().y));
+            }
         }
     }
 

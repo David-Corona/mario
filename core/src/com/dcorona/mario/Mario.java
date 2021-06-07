@@ -2,6 +2,8 @@ package com.dcorona.mario;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.dcorona.mario.Screens.FirstLevel;
@@ -28,6 +30,16 @@ public class Mario extends Game {
 	@Override
 	public void create () {
 		this.batch = new SpriteBatch();
+		this.manager= new AssetManager();
+		this.manager.load("audio/music/mario_music.ogg", Music.class);
+		this.manager.load("audio/sounds/coin.wav", Sound.class);
+		this.manager.load("audio/sounds/bump.wav", Sound.class);
+		this.manager.load("audio/sounds/breakblock.wav", Sound.class);
+		this.manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
+		this.manager.load("audio/sounds/powerup.wav", Sound.class);
+		this.manager.load("audio/sounds/stomp.wav", Sound.class);
+		this.manager.load("audio/sounds/mariodie.wav", Sound.class);
+		this.manager.load("audio/sounds/powerdown.wav", Sound.class);
 		this.setScreen(new FirstLevel(this));
 	}
 
